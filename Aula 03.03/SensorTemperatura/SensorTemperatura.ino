@@ -4,44 +4,42 @@
 #include <ESP8266WebServer.h>
 #include "html.h"
 
-#define DS18B20PIN D2   // No ESP8266 use D2
+#define DS18B20PIN D2
 
 OneWire oneWire(DS18B20PIN);
 DallasTemperature sensor(&oneWire);
 
 ESP8266WebServer server(80);
 
-float _temperature;
+float _temperature = 0;
 
 const char* ssid = "REDEWORK";
 const char* password = "Acessonet05";
 
+unsigned long lastRead = 0;
+const unsigned long interval = 1000; // 1 segundo
+
 void MainPage() {
-  String _html_page = html_page;
-  server.send(200, "text/html", _html_page);
+  server.send_P(200, "text/html", html_page);
 }
 
 void Temp() {
-  String TempValue = String(_temperature);
-  server.send(200, "text/plain", TempValue);
+  server.send(200, "text/plain", String(_temperature));
 }
 
-void setup(void){
+void setup() {
   Serial.begin(115200);
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-
+  Serial.print("Connecting");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
 
   Serial.println("\nConnected!");
-  Serial.print("IP: ");
   Serial.println(WiFi.localIP());
 
   sensor.begin();
@@ -52,14 +50,18 @@ void setup(void){
   server.begin();
 }
 
-void loop(void){
-  sensor.requestTemperatures();
-  _temperature = sensor.getTempCByIndex(0);
+void loop() {
 
-  Serial.print("Temperature = ");
-  Serial.print(_temperature);
-  Serial.println(" ºC");
+  // 🔥 Leitura não-bloqueante
+  if (millis() - lastRead >= interval) {
+    lastRead = millis();
 
-  server.handleClient();
-  delay(1000);
+    sensor.requestTemperatures();
+    _temperature = sensor.getTempCByIndex(0);
+
+    Serial.print("Temperature: ");
+    Serial.println(_temperature);
+  }
+
+  server.handleClient(); // nunca pode travar
 }
