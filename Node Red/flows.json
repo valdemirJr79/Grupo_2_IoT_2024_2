@@ -1,0 +1,542 @@
+[
+    {
+        "id": "c7dd9957d26cefdb",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "051c63fecdc474d9",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "0a9409cb64ac16c1",
+        "type": "ui_tab",
+        "name": "Motor 1",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "0bee76480b59c298",
+        "type": "ui_group",
+        "name": "Motor 1",
+        "tab": "0a9409cb64ac16c1",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "c270c192f9cbb6f7",
+        "type": "inject",
+        "z": "c7dd9957d26cefdb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 180,
+        "wires": [
+            [
+                "6fcb4093e04bdb80"
+            ]
+        ]
+    },
+    {
+        "id": "6fcb4093e04bdb80",
+        "type": "function",
+        "z": "c7dd9957d26cefdb",
+        "name": "function 1",
+        "func": "let vibx = (Math.random() * 2 - 1).toFixed(2);\nlet viby = (Math.random() * 2 - 1).toFixed(2);\nlet vibz = (9.81 + (Math.random()*0.5 - 0.25)).toFixed(2);\n\nlet msgs = [];\n\nmsgs.push({ topic: \"X\", payload: parseFloat(vibx) });\nmsgs.push({ topic: \"Y\", payload: parseFloat(viby) });\nmsgs.push({ topic: \"Z\", payload: parseFloat(vibz) });\n\nreturn [msgs];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 180,
+        "wires": [
+            [
+                "d736f2ca8f20e04d",
+                "9d837e39c828fa60"
+            ]
+        ]
+    },
+    {
+        "id": "d736f2ca8f20e04d",
+        "type": "debug",
+        "z": "c7dd9957d26cefdb",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "9d837e39c828fa60",
+        "type": "ui_chart",
+        "z": "c7dd9957d26cefdb",
+        "name": "",
+        "group": "0bee76480b59c298",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "DADOS DE VIBRAÇÃO",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-2",
+        "ymax": "12",
+        "removeOlder": "60",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 650,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "45fb201c0886a862",
+        "type": "inject",
+        "z": "c7dd9957d26cefdb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 340,
+        "wires": [
+            [
+                "5fee64b8c571500f"
+            ]
+        ]
+    },
+    {
+        "id": "5fee64b8c571500f",
+        "type": "function",
+        "z": "c7dd9957d26cefdb",
+        "name": "function 2",
+        "func": "let temp = (Math.random() * 10).toFixed(2);\n\nmsg.payload = parseFloat(temp);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 340,
+        "wires": [
+            [
+                "1f4db93e18726d5f",
+                "0431cf8a7de45df8",
+                "4f05fe9a323cce33"
+            ]
+        ]
+    },
+    {
+        "id": "0431cf8a7de45df8",
+        "type": "debug",
+        "z": "c7dd9957d26cefdb",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "1f4db93e18726d5f",
+        "type": "ui_chart",
+        "z": "c7dd9957d26cefdb",
+        "name": "",
+        "group": "0bee76480b59c298",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Dados de temperatura",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "60",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 640,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4f05fe9a323cce33",
+        "type": "function",
+        "z": "c7dd9957d26cefdb",
+        "name": "function 3",
+        "func": "let temp = msg.payload;\nlet tempMaxima = 9;\n\nif(temp>tempMaxima){\n\n    msg.payload = \"Sim\";\n    \n}else{\n    msg.payload = \"Não\";\n}\n    \nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 500,
+        "wires": [
+            [
+                "5fac601df00691ae"
+            ]
+        ]
+    },
+    {
+        "id": "5fac601df00691ae",
+        "type": "ui_text",
+        "z": "c7dd9957d26cefdb",
+        "group": "0bee76480b59c298",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Temperatura ultrapassou 9C",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 780,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "e285a398d3f15435",
+        "type": "inject",
+        "z": "c7dd9957d26cefdb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 580,
+        "wires": [
+            [
+                "1441802a799e0e11"
+            ]
+        ]
+    },
+    {
+        "id": "1441802a799e0e11",
+        "type": "function",
+        "z": "c7dd9957d26cefdb",
+        "name": "function 4",
+        "func": "let tensao = (220 + (Math.random() * 6 - 3)).toFixed(2);\nlet corrente = (20 + (Math.random() * 6 - 3)).toFixed(2);\n\nlet msgs = [];\n\nmsgs.push({topic: \"Tensão\", payload: parseFloat(tensao)})\nmsgs.push({topic: \"Corrente\", payload: parseFloat(corrente)})\n\nreturn [msgs];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 580,
+        "wires": [
+            [
+                "bf3cc7e8115a78be",
+                "5d119b115bea9aaa",
+                "8ba88925cac2bfb6"
+            ]
+        ]
+    },
+    {
+        "id": "bf3cc7e8115a78be",
+        "type": "ui_chart",
+        "z": "c7dd9957d26cefdb",
+        "name": "",
+        "group": "0bee76480b59c298",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Dados de tensão e Corrente",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "60",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 660,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5d119b115bea9aaa",
+        "type": "debug",
+        "z": "c7dd9957d26cefdb",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "8ba88925cac2bfb6",
+        "type": "function",
+        "z": "c7dd9957d26cefdb",
+        "name": "function 5",
+        "func": "let tensaoMax = 240;\n\nlet tensao;\n\nif(msg.topic = \"Tensão\"){\n\n    tensao = msg.payload;\n\n    if(tensao>tensaoMax){\n\n        msg.payload = \"sim\";\n    }else{\n        msg.payload = \"não\";\n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 740,
+        "wires": [
+            [
+                "c92dfccab942069e"
+            ]
+        ]
+    },
+    {
+        "id": "c92dfccab942069e",
+        "type": "ui_text",
+        "z": "c7dd9957d26cefdb",
+        "group": "0bee76480b59c298",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Tensão Ultrapassou 240V:",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 820,
+        "y": 740,
+        "wires": []
+    }
+]
