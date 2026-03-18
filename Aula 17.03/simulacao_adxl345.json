@@ -1,0 +1,121 @@
+[
+    {
+        "id": "e1f2c5560f781db9",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "cfdc656e41829d16",
+        "type": "inject",
+        "z": "e1f2c5560f781db9",
+        "name": "Gerar Leitura",
+        "props": [],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "x": 160,
+        "y": 160,
+        "wires": [
+            [
+                "9022ae5ff9feb341"
+            ]
+        ]
+    },
+    {
+        "id": "9022ae5ff9feb341",
+        "type": "function",
+        "z": "e1f2c5560f781db9",
+        "name": "Simular ADXL345",
+        "func": "// Simulação de vibração do ADXL345 em 3 eixos\nlet vibX = (Math.random() * 2 - 1).toFixed(2);   // Eixo X (-1 a 1 m/s²)\nlet vibY = (Math.random() * 2 - 1).toFixed(2);   // Eixo Y (-1 a 1 m/s²)\nlet vibZ = (9.81 + (Math.random() * 0.5 - 0.25)).toFixed(2); // Eixo Z próximo da gravidade\n\n// Enviar três mensagens separadas (para o gráfico identificar cada série)\nlet msgs = [];\nmsgs.push({ topic: \"X\", payload: parseFloat(vibX) });\nmsgs.push({ topic: \"Y\", payload: parseFloat(vibY) });\nmsgs.push({ topic: \"Z\", payload: parseFloat(vibZ) });\n\nreturn [msgs];",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 160,
+        "wires": [
+            [
+                "339d20fc5acaf656",
+                "2f33b0398421a57d"
+            ]
+        ]
+    },
+    {
+        "id": "339d20fc5acaf656",
+        "type": "ui_chart",
+        "z": "e1f2c5560f781db9",
+        "name": "Gráfico Vibração",
+        "group": "f0b7d5d8b7f1e123",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Simulação ADXL345",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-2",
+        "ymax": "12",
+        "removeOlder": "60",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": true,
+        "className": "",
+        "x": 640,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2f33b0398421a57d",
+        "type": "debug",
+        "z": "e1f2c5560f781db9",
+        "name": "Debug Valores",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "f0b7d5d8b7f1e123",
+        "type": "ui_group",
+        "name": "Gráficos",
+        "tab": "",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    }
+]
