@@ -72,24 +72,27 @@ void setup(void){
   Serial.println("Sistema iniciado...");
 }
 
-// ---------- LOOP ----------
-void loop(void){
+void loop() {
 
-  // Leitura temperatura
-  sensor.requestTemperatures();
-  _temperature = sensor.getTempCByIndex(0);
+  server.handleClient(); // SEMPRE primeiro
 
-  Serial.print("Temperature = ");
-  Serial.print(_temperature);
-  Serial.println(" ºC");
+  static unsigned long lastRead = 0;
 
-  // Leitura distância
-  _distancia = ultrasonic.read();
+  if (millis() - lastRead >= 1000) {
 
-  Serial.print("Distancia em cm: ");
-  Serial.println(_distancia);
+    lastRead = millis();
 
-  server.handleClient();
+    // Temperatura
+    sensor.requestTemperatures();
+    _temperature = sensor.getTempCByIndex(0);
 
-  delay(1000);
+    Serial.print("Temperature = ");
+    Serial.println(_temperature);
+
+    // Distância
+    _distancia = ultrasonic.read();
+
+    Serial.print("Distancia = ");
+    Serial.println(_distancia);
+  }
 }
