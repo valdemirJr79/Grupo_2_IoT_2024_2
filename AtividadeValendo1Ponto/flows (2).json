@@ -1,0 +1,183 @@
+[
+    {
+        "id": "adb9bfbb3ac20137",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3a995166f0f46bcd",
+        "type": "inject",
+        "z": "adb9bfbb3ac20137",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 140,
+        "wires": [
+            [
+                "d26f638e62864228"
+            ]
+        ]
+    },
+    {
+        "id": "d26f638e62864228",
+        "type": "function",
+        "z": "adb9bfbb3ac20137",
+        "name": "function 1",
+        "func": "// Recupera a amplitude atual do contexto (ou começa em 10 se não existir)\nlet amplitude = context.get('amplitude') || 10;\n\n// Aumenta a amplitude gradualmente para simular o gráfico crescendo\namplitude += 5; \nif (amplitude > 1000) {\n    amplitude = 1000;\n}\n\ncontext.set('amplitude', amplitude);\n\n// Gera valores aleatórios baseados na amplitude atual\n// (Math.random() * 2 - 1) gera entre -1 e 1, multiplicamos pela amplitude\nlet vibX = ( (Math.random() * 2 - 1) * (amplitude * 0.3) ).toFixed(2);\nlet vibY = ( (Math.random() * 2 - 1) * amplitude ).toFixed(2);\nlet vibZ = ( (Math.random() * 2 - 1) * (amplitude * 0.2) ).toFixed(2);\n\nlet msgs = [];\nmsgs.push({ topic: \"X\", payload: parseFloat(vibX) });\nmsgs.push({ topic: \"Y\", payload: parseFloat(vibY) });\nmsgs.push({ topic: \"Z\", payload: parseFloat(vibZ) });\n\nreturn [msgs];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "c960a6807d468e7f",
+                "238edd950315057e",
+                "3525391e10e23b22"
+            ]
+        ]
+    },
+    {
+        "id": "238edd950315057e",
+        "type": "debug",
+        "z": "adb9bfbb3ac20137",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c960a6807d468e7f",
+        "type": "ui_chart",
+        "z": "adb9bfbb3ac20137",
+        "name": "",
+        "group": "c5f1ed37569eac49",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-1000",
+        "ymax": "1000",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 530,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3525391e10e23b22",
+        "type": "function",
+        "z": "adb9bfbb3ac20137",
+        "name": "function 6",
+        "func": "let valorMax = 1000;\n\nlet valor;\n\nif(msg.topic = \"Y\"){\n\n    valor = msg.payload;\n\n    if (valor > valorMax){\n\n        msg.payload = \"ATENÇÃO: Valor fora da limiar\";\n    }else{\n        msg.payload = \"Valor dentro da limiar\";\n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 300,
+        "wires": [
+            [
+                "32fdfc53d6f601ca"
+            ]
+        ]
+    },
+    {
+        "id": "32fdfc53d6f601ca",
+        "type": "ui_text",
+        "z": "adb9bfbb3ac20137",
+        "group": "c5f1ed37569eac49",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Alerta",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 630,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "c5f1ed37569eac49",
+        "type": "ui_group",
+        "name": "Sensor 1",
+        "tab": "606d6e5bd2a19237",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "606d6e5bd2a19237",
+        "type": "ui_tab",
+        "name": "Sensor de Vibração",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
