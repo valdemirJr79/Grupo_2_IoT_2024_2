@@ -1,0 +1,312 @@
+[
+    {
+        "id": "adb9bfbb3ac20137",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3a995166f0f46bcd",
+        "type": "inject",
+        "z": "adb9bfbb3ac20137",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 140,
+        "wires": [
+            [
+                "d26f638e62864228"
+            ]
+        ]
+    },
+    {
+        "id": "d26f638e62864228",
+        "type": "function",
+        "z": "adb9bfbb3ac20137",
+        "name": "function 1",
+        "func": "// Recupera a amplitude\nlet amplitude = context.get('amplitude') || 10;\n\namplitude += 5;\nif (amplitude > 1000) {\n    amplitude = 1000;\n}\n\ncontext.set('amplitude', amplitude);\n\n// Gera valores\nlet vibX = ((Math.random() * 2 - 1) * (amplitude * 0.3)).toFixed(2);\nlet vibY = ((Math.random() * 2 - 1) * amplitude).toFixed(2);\nlet vibZ = ((Math.random() * 2 - 1) * (amplitude * 0.2)).toFixed(2);\n\n// SQL CORRETO\nmsg.topic = `\nINSERT INTO vibracao (vibX, vibY, vibXZ)\nVALUES (${vibX}, ${vibY}, ${vibZ})\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 180,
+        "wires": [
+            [
+                "c960a6807d468e7f",
+                "238edd950315057e",
+                "3525391e10e23b22"
+            ]
+        ]
+    },
+    {
+        "id": "238edd950315057e",
+        "type": "debug",
+        "z": "adb9bfbb3ac20137",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c960a6807d468e7f",
+        "type": "ui_chart",
+        "z": "adb9bfbb3ac20137",
+        "name": "",
+        "group": "c5f1ed37569eac49",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-1000",
+        "ymax": "1000",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 530,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3525391e10e23b22",
+        "type": "function",
+        "z": "adb9bfbb3ac20137",
+        "name": "Valida os dados",
+        "func": "let valorMax = 1000;\n\nlet valor;\n\nif(msg.topic = \"Y\"){\n\n    valor = msg.payload;\n\n    if (valor > valorMax){\n\n        msg.payload = \"ATENÇÃO: Valor fora da limiar\";\n    }else{\n        msg.payload = \"Valor dentro da limiar\";\n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 300,
+        "wires": [
+            [
+                "32fdfc53d6f601ca"
+            ]
+        ]
+    },
+    {
+        "id": "32fdfc53d6f601ca",
+        "type": "ui_text",
+        "z": "adb9bfbb3ac20137",
+        "group": "c5f1ed37569eac49",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Alerta",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 630,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "dca4b06b66538186",
+        "type": "mysql",
+        "z": "adb9bfbb3ac20137",
+        "mydb": "30ac54565fa55259",
+        "name": "Banco iot",
+        "x": 520,
+        "y": 380,
+        "wires": [
+            [
+                "c850171db34bce0f"
+            ]
+        ]
+    },
+    {
+        "id": "c850171db34bce0f",
+        "type": "debug",
+        "z": "adb9bfbb3ac20137",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "ce6cd51b54c29cd0",
+        "type": "mqtt in",
+        "z": "adb9bfbb3ac20137",
+        "name": "",
+        "topic": "adxl345/v1",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "658ece6ef79448ed",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 460,
+        "wires": [
+            [
+                "ce818783c1a9fede",
+                "871a14c016c54cad"
+            ]
+        ]
+    },
+    {
+        "id": "ce818783c1a9fede",
+        "type": "debug",
+        "z": "adb9bfbb3ac20137",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "871a14c016c54cad",
+        "type": "function",
+        "z": "adb9bfbb3ac20137",
+        "name": "tratar valor do mqtt",
+        "func": "// Pega a string que veio do MQTT\nlet texto = msg.payload;\n\n// Extrai os valores usando regex\nlet match = texto.match(/X:\\s*(-?\\d+\\.?\\d*)\\s*Y:\\s*(-?\\d+\\.?\\d*)\\s*Z:\\s*(-?\\d+\\.?\\d*)/);\n\nif (match) {\n    let vibX = parseFloat(match[1]);\n    let vibY = parseFloat(match[2]);\n    let vibZ = parseFloat(match[3]);\n\n    // Monta o SQL\n    msg.topic = `INSERT INTO vibracao (vibX, vibY, vibXZ) VALUES (${vibX}, ${vibY}, ${vibZ})`;\n\n    return msg;\n} else {\n    node.warn(\"Erro ao extrair valores\");\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 380,
+        "wires": [
+            [
+                "dca4b06b66538186"
+            ]
+        ]
+    },
+    {
+        "id": "c5f1ed37569eac49",
+        "type": "ui_group",
+        "name": "Sensor 1",
+        "tab": "606d6e5bd2a19237",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "30ac54565fa55259",
+        "type": "MySQLdatabase",
+        "name": "bancoiot",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "bancoiot",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "658ece6ef79448ed",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "606d6e5bd2a19237",
+        "type": "ui_tab",
+        "name": "Sensor de Vibração",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
