@@ -1,0 +1,68 @@
+body{
+    display: flex;
+    justify-content: center; /* centraliza horizontal */
+    align-items: center;     /* centraliza vertical */
+    height: 100vh;           /* altura da tela */
+}
+
+.div-principal{
+    display: flex;
+    width: 800px;
+    height: 500px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px #d0daed
+}
+.cadastro-div{
+
+    width: 400;
+    height: 500px;
+}
+
+p{
+    display: block;
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 90px;
+    font-family: 'Roboto', sans-serif;
+    height: 30px;
+    width: 30px;
+    margin-left: 385px;
+    margin-right: 385px;
+}
+
+.logo{
+    margin-top: 90px;
+    width: 150px;
+    margin-left: 125px;
+    margin-bottom: 20px;
+}
+.imagem-grande{
+
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+input{
+    display: block;
+    width: 270px;
+    margin-left: 65px;
+    height: 30px;
+    margin-bottom: 15px;
+    border: none;
+    border-bottom: solid;
+    border-color: #d0daed;
+    outline: none;
+}
+
+button{
+    width: 140px;
+    margin-left: 130px;
+    height: 36px;
+    margin-top: 15px;
+    background-color:#336b9e;
+    border-style: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Refrigeradores - ColdTrack</title>
+  <link rel="stylesheet" href="css/refrigerador.css">
+  <link rel="stylesheet" href="css/navbar.css">
+</head>
+<body>
+
+
+<main>
+    <h6 class="title">Refrigeradores</h6>
+    <div class="container" id="freezerContainer">
+
+        <!-- Freezers existentes -->
+        <div class="card" th:each="freezer : ${listaFreezers}" th:onclick="'window.location.href=\'/refrigerador/atualizar/' + ${freezer.id} + '\''">
+            <img src="img/Icons.png" alt="Icon" class="icon-neve">
+            <p th:text="${freezer.nome}"></p>
+
+            <div class="card-actions">
+                <!-- Botão Editar -->
+                <button class="btn-action btn-edit" title="Editar"
+                        th:onclick="'event.stopPropagation(); window.location.href=\'/refrigerador/atualizar/' + ${freezer.id} + '\''"></button>
+                
+                <!-- Botão Excluir -->
+                <button class="btn-action btn-delete" title="Excluir"
+                        th:onclick="'event.stopPropagation(); excluirFreezer(' + ${freezer.id} + ')'"></button>
+            </div>
+        </div>
+            
+        <!-- Botão de adicionar -->
+        <a th:href="@{/refrigerador/cadastro}" style="text-decoration: none;">
+            <div class="card add">+</div>
+        </a>
+
+    </div>
+</main>
+
+<script>
+    async function excluirFreezer(id) {
+        if (confirm('Tem certeza que deseja excluir este refrigerador?')) {
+            try {
+                const response = await fetch(`/post-freezers/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    // Recarregar a página para atualizar a lista
+                    window.location.reload();
+                } else {
+                    alert('Erro ao excluir o refrigerador.');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro na comunicação com o servidor.');
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

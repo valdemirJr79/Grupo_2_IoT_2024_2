@@ -18,16 +18,10 @@ ESP8266WebServer server(80);
 
 // ---------- VARIÁVEIS ----------
 float _temperature;
-long _distancia;
 
 const char* ssid = "REDEWORK";
 const char* password = "Acessonet05";
 
-// ---------- PÁGINA PRINCIPAL ----------
-void MainPage() {
-  String _html_page = html_page;
-  server.send(200, "text/html", _html_page);
-}
 
 // ---------- ROTA TEMPERATURA ----------
 void Temp() {
