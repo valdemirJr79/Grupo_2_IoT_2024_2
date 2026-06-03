@@ -1,0 +1,92 @@
+.container {
+  display: flex;
+  height: 100vh; /* ocupa a tela toda */
+}
+
+.left, .right {
+  width: 50%;
+}
+
+p, span{
+    font-family: Helvetica;
+    
+}
+
+.p1{
+    display: inline-block;
+    width: 190px;
+    height: auto;
+    font-size: 80px;
+    font-weight: 900;
+    color: #336b9e;
+}
+.p2{
+    display: inline-block;
+    width: 190px;
+    height: auto;
+    font-size: 80px;
+    font-weight: 900;
+    margin-left: 30px;
+    color: #e3992e;
+}
+
+.frase1{
+    display: block;
+    margin-left: 50px;
+    margin-top: 100px;
+}
+.p3{
+    display: inline-block;
+    width: 280px;
+    height: auto;
+    font-size: 80px;
+    font-weight: 900;
+    color: #336b9e;
+
+}
+.p4{
+    display: inline-block;
+    width: 290px;
+    height: auto;
+    font-size: 80px;
+    font-weight: 900;
+    color: #e3992e;
+    margin-left: 20px;
+}
+.frase2{
+    display: block;
+    margin-left: 50px;
+    margin-bottom: 15px;
+}
+
+.frase1, .frase2 {
+    line-height: 1;
+}
+
+.frase3{
+    font-size: 31px;
+    color: #545454;
+    margin-left: 53px;
+    margin-top: 10px;
+    width: 700px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+button{
+    background-color: #336b9e;
+    width: 250px;
+    height: 55px;
+    margin-left: 50px;
+    margin-top: 15px;
+    font-size: 20px;
+    border-style: none;
+    border-radius: 100px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.link-button{
+    color: white;
+    text-decoration: none;
+}

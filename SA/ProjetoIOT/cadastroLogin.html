@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ColdTrack</title>
+    <link rel="stylesheet" href="css/cadastroLogin.css">
+</head>
+<body>
+    <div class="div-principal">
+        <div class="img-div">
+            <img class="imagem-grande" src="img/login.png" alt="">
+        </div>
+
+        <form method="post" action="@{/login}" object="${cadastroDto}">
+            <div class="cadastro-div">
+                <img class="logo" src="img/Logo ColdTrack.png" alt="">
+                <input type="text" placeholder="Nome" required field="*{nome}">
+                <input type="email" placeholder="Email" required field="*{email}">
+                <input type="password" placeholder="Senha" required field="*{senha}"> 
+                <button type="submit">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

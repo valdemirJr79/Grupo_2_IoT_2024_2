@@ -1,0 +1,82 @@
+body{
+    background-color: #f0f8ff;
+}
+
+.title-div{
+    display: flex;
+    align-items: center;          /* alinha na mesma altura */
+    justify-content: space-between;
+    padding: 50px;   
+}
+
+h6{
+    font-family: Helvetica;
+}
+
+.title{
+    display: inline-block;
+    width: 190px;
+    height: auto;
+    font-size: 40px;
+    font-weight: 900;
+    color: #e3992e;
+   
+}
+.cadastrar-button{
+    height: 40px;
+    width: 100px;
+    border-radius: 10px;
+    color: white;
+    background-color: #336b9e;
+    border-style: none;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.container {
+    margin: 0 50px;
+    border: 2px white;
+    box-shadow: 10px 10px 10px rgba(227, 153, 46, 0.3);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+    font-family: helvetica;
+}
+
+/* alinhar botões lado a lado */
+.acoes {
+    display: flex;
+    gap: 10px;
+}
+
+/* botões */
+.btn-editar {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-excluir {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+thead{
+    background-color: #336b9e;
+    color: white;
+}

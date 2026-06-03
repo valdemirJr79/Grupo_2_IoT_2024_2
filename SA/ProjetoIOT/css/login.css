@@ -1,0 +1,116 @@
+body{
+    display: flex;
+    justify-content: center; /* centraliza horizontal */
+    align-items: center;     /* centraliza vertical */
+    height: 100vh;           /* altura da tela */
+}
+
+.div-principal{
+    display: flex;
+    width: 800px;
+    height: 500px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px #d0daed;
+}
+
+.div-cadastro{
+
+    background-color:#336b9e;
+    width: 400px;
+    height: 500px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    
+}
+img{
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.div-secundaria{
+    display: inline-block;
+    width: 400px;
+    height: 500px;
+}
+
+p{
+    font-family: 'Roboto', sans-serif;
+}
+
+.titulo-login{
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 90px;
+}
+input{
+    display: block;
+    width: 270px;
+    margin-left: 65px;
+    height: 30px;
+    margin-bottom: 15px;
+    border: none;
+    border-bottom: solid;
+    border-color: #d0daed;
+    outline: none;
+}
+button{
+    width: 140px;
+    margin-left: 130px;
+    height: 36px;
+    margin-top: 15px;
+    background-color:#336b9e;
+    border-style: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.messagem-cadastro{
+    text-align: center;
+    margin-top: 110px;
+    
+}
+a{
+    text-decoration: none;
+    color:#336b9e;
+}
+
+.logo{
+    margin-top: 90px;
+    width: 150px;
+    margin-left: 125px;
+    margin-bottom: 20px;
+}
+
+.p1{
+    font-size: 35px;
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 155px;
+    margin-bottom: 6px;
+}
+.p2,.p3{
+    color: #f0f8ff;
+    margin-bottom: 6px;
+    text-align: center;
+    margin-top: 0px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.button-cadastro{
+
+    width: 140px;
+    margin-left: 130px;
+    height: 36px;
+    margin-top: 15px;
+    background-color:#336b9e;
+    border-style: solid;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    border-color: white;
+    text-align: center;
+}
