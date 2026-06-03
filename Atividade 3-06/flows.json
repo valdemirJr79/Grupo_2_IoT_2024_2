@@ -1,0 +1,123 @@
+[
+    {
+        "id": "99018d9797555cc3",
+        "type": "tab",
+        "label": "Switchgear Temperature Monitoring",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "043630600225caa0",
+        "type": "mqtt in",
+        "z": "99018d9797555cc3",
+        "name": "Temperature Sensors",
+        "topic": "senai/temperatura/#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "8fa476e0b5b73c9a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 140,
+        "wires": [
+            [
+                "53ec1aaa2b245595"
+            ]
+        ]
+    },
+    {
+        "id": "867dec221216dd1f",
+        "type": "debug",
+        "z": "99018d9797555cc3",
+        "name": "Differential Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 690,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "be705c595aac99fe",
+        "type": "function",
+        "z": "99018d9797555cc3",
+        "name": "function 1",
+        "func": "// --- CONFIGURAÇÕES DO SISTEMA ---\nconst VALOR_ALVO = 23;        // Temperatura padrão da sala (23°C)\nconst PORCENTAGEM_ERRO = 30;  // Tolerância de erro (30% cobre de ~16°C até ~30°C)\n// ------------------------------------\n\n// Inicializa as variáveis de contexto\nlet leituras = context.get('leituras') || [];\nlet bloqueado = context.get('bloqueado') || false;\nlet anomaliaDetectada = context.get('anomaliaDetectada') || false;\nlet picosDeAnomalia = context.get('picosDeAnomalia') || [];\n\n// 1. VERIFICAÇÃO DE BLOQUEIO\n// Se a janela de 10 minutos já fechou (20 leituras), ignora novas mensagens\nif (bloqueado) {\n    node.status({fill:\"red\", shape:\"dot\", text: \"Bloqueado: Janela de 10min encerrada\"});\n    return null; \n}\n\n// Captura e valida a temperatura que veio do MQTT\nlet tempAtual = Number(msg.payload);\nif (isNaN(tempAtual)) {\n    node.warn(\"Valor recebido não é um número válido: \" + msg.payload);\n    return null;\n}\n\n// 2. ACUMULAÇÃO DE DADOS (Adiciona primeiro no histórico)\nleituras.push(tempAtual);\n\n// --- VERIFICAÇÃO DE AUMENTO DE 3°C EM 2 MINUTOS ---\n// Como o dado atual já está no array, comparamos com 4 posições atrás (2 minutos)\nif (leituras.length >= 5) {\n    let tempDoisMinutosAtras = leituras[leituras.length - 5];\n    let diferenca = tempAtual - tempDoisMinutosAtras;\n\n    if (diferenca >= 3) {\n        anomaliaDetectada = true;\n        // Guarda o registro de quando e quanto subiu no histórico interno\n        picosDeAnomalia.push(`Subiu ${diferenca.toFixed(1)}°C em 2min (de ${tempDoisMinutosAtras}°C para ${tempAtual}°C)`);\n        context.set('anomaliaDetectada', anomaliaDetectada);\n        context.set('picosDeAnomalia', picosDeAnomalia);\n    }\n}\n\n// Se ainda não chegou a 20 leituras, o código APENAS continua coletando em silêncio\nif (leituras.length < 20) {\n    context.set('leituras', leituras);\n    node.status({fill:\"blue\", shape:\"dot\", text: `Coletando: ${leituras.length}/20 (Faltam ${(20 - leituras.length) * 30}s)`});\n    return null; // Não envia mensagem final ainda, continua o fluxo de coleta\n}\n\n// 3. ATINGIU OS 10 MINUTOS (20 Leituras) -> AGORA SIM Bloqueia e calcula tudo\nbloqueado = true;\ncontext.set('bloqueado', bloqueado);\ncontext.set('leituras', leituras); \n\n// --- CÁLCULO DA MEDIANA ---\nlet valoresOrdenados = [...leituras].sort((a, b) => a - b);\nlet metade = Math.floor(valoresOrdenados.length / 2);\nlet mediana = (valoresOrdenados[metade - 1] + valoresOrdenados[metade]) / 2; \n\n// --- VERIFICAÇÃO DA MARGEM DE ERRO DA MEDIANA ---\nlet limiteInferior = VALOR_ALVO * (1 - PORCENTAGEM_ERRO / 100);\nlet limiteSuperior = VALOR_ALVO * (1 + PORCENTAGEM_ERRO / 100);\n\nlet statusErroMediana = \"\";\nlet dentroDoLimiteMediana = false;\n\nif (mediana < limiteInferior) {\n    statusErroMediana = \"Abaixo do limite permitido (Para menos)\";\n} else if (mediana > limiteSuperior) {\n    statusErroMediana = \"Acima do limite permitido (Para mais)\";\n} else {\n    statusErroMediana = \"Dentro do limite aceitável\";\n    dentroDoLimiteMediana = true;\n}\n\n// --- MONTAGEM DO PAYLOAD DE SAÍDA FINAL ---\nmsg.payload = {\n    resultado: \"Janela de 10 minutos concluída com sucesso.\",\n    totalLeituras: leituras.length,\n    medianaCalculada: Number(mediana.toFixed(2)) + \"°C\",\n    valorAlvo: VALOR_ALVO + \"°C\",\n    limitesAceitaveis: {\n        min: Number(limiteInferior.toFixed(2)) + \"°C\",\n        max: Number(limiteSuperior.toFixed(2)) + \"°C\"\n    },\n    medianaDentroDoLimite: dentroDoLimiteMediana,\n    statusMediana: statusErroMediana,\n    \n    // RELATÓRIO DO ERRO DE 3 GRAUS (Apenas exibido agora no final):\n    ocorreuErroAumentoRapido: anomaliaDetectada,\n    detalhesDoAumentoRapido: anomaliaDetectada ? picosDeAnomalia : \"Nenhuma anomalia de pico térmico detectada.\",\n    \n    historicoDasLeituras: leituras\n};\n\n// Atualização visual final do nó no Node-RED\nif (anomaliaDetectada) {\n    node.status({fill:\"red\", shape:\"boom\", text: \"Finalizado (Com registro de anomalia)\"});\n} else {\n    node.status({fill:\"green\", shape:\"dot\", text: \"Finalizado com sucesso!\"});\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 140,
+        "wires": [
+            [
+                "867dec221216dd1f"
+            ]
+        ]
+    },
+    {
+        "id": "53ec1aaa2b245595",
+        "type": "delay",
+        "z": "99018d9797555cc3",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "30",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 340,
+        "y": 60,
+        "wires": [
+            [
+                "be705c595aac99fe"
+            ]
+        ]
+    },
+    {
+        "id": "8fa476e0b5b73c9a",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
